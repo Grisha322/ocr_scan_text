@@ -9,10 +9,8 @@ import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:ocr_scan_text/ocr_scan/model/scan_match_counter.dart';
 import 'package:path/path.dart' as path;
-import 'package:pdf_render/pdf_render.dart';
 
 import '../../ocr_scan_text.dart';
-import '../helper/pdf_helper.dart';
 import '../render/scan_renderer.dart';
 
 enum Mode {
@@ -82,49 +80,13 @@ class OcrScanService {
         extension == '.png' ||
         extension == '.jpg' ||
         extension == '.jpeg');
-    if (extension == '.pdf') {
-      final PdfDocument document = await PdfDocument.openFile(
-        file.path,
-      );
-      return await _processStaticPDF(
-        document,
-        scanModules,
-      );
-    } else if (extension == '.png' ||
-        extension == '.jpg' ||
-        extension == '.jpeg') {
+    if (extension == '.png' || extension == '.jpg' || extension == '.jpeg') {
       return await _processStaticImage(
         file,
         scanModules,
       );
     }
     return null;
-  }
-
-// Process image from camera stream
-  Future<OcrTextRecognizerResult?> _processStaticPDF(
-    PdfDocument pdfDocument,
-    List<ScanModule> scanModules,
-  ) async {
-    ImagePDF? imagePDF = await PDFHelper.convertToPDFImage(pdfDocument);
-    if (imagePDF == null) {
-      return null;
-    }
-
-    ui.Image background =
-        await decodeImageFromList(await imagePDF.file.readAsBytes());
-
-    return await processImage(
-      ml_kit.InputImage.fromFilePath(imagePDF.file.path),
-      Size(
-        background.width.toDouble(),
-        background.height.toDouble(),
-      ),
-      background,
-      Mode.static,
-      scanModules,
-      null,
-    );
   }
 
   Future<OcrTextRecognizerResult?> _processStaticImage(
