@@ -1,6 +1,6 @@
 name: ocr_scan_text
 description: OCR Scan Text is a wrapper around the "Google ML kit Text Recognition" library.
-version: 1.3.2
+version: 1.3.3
 homepage: https://github.com/boursorama/ocr_scan_text
 environment:
   sdk: ^3.5.3
