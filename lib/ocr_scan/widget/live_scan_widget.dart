@@ -157,6 +157,8 @@ class LiveScanWidgetState extends ScanWidgetState<LiveScanWidget> {
       camera,
       ResolutionPreset.high,
       enableAudio: false,
+      imageFormatGroup:
+          Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.yuv420,
     );
     _controller?.initialize().then((_) {
       if (!mounted) {
